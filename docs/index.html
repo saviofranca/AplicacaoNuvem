@@ -38,7 +38,10 @@
                         <input type="text" name="telefone" id="input-telefone" class="form-label"> 
 
                         <label for="input-email" class="form-label">E-mail: </label>
-                        <input type="email" name="email" id="input-email" class="form-label">               
+                        <input type="email" name="email" id="input-email" class="form-label"> 
+                        
+                        <label for="input-obs" class="form-label">OBS: </label>
+                        <input type="text" name="obs" id="input-obs" class="form-label">
                     </div>
                     <input type="button" id="btn-salvar" value="Salvar">
                     <input type="button" id="btn-cancelar" value="Cancelar">
@@ -66,7 +69,7 @@
                         'Authorization': apiAuthorization
                     },
                     success: (contatos) => {
-                        let contatosStr = '<tr><th>Id</th><th>Nome</th><th>Telefone</th><th>E-mail</th><th></th><th></th></tr>';
+                        let contatosStr = '<tr><th>Id</th><th>Nome</th><th>Telefone</th><th>E-mail</th><th>OBS</th><th>DTCONTATO</th><th></th><th></th></tr>';
                         for (contato of contatos) {
                             contatosStr +=
                                     '<tr>' +
@@ -74,7 +77,9 @@
                                     '<td>' + contato.nome + '</td>' +
                                     '<td>' + contato.telefone + '</td>' +
                                     '<td>' + contato.email + '</td>' +
-                                    '<td><i class="bi bi-pencil-fill" onclick="editarContato(' + contato.id + ',\'' + contato.nome + '\',\'' + contato.telefone + '\',\'' + contato.email + '\');"></i></td>' +
+                                    '<td>' + contato.obs + '</td>' +
+                                    '<td>' + contato.dtcontato + '</td>' +
+                                    '<td><i class="bi bi-pencil-fill" onclick="editarContato(' + contato.id + ',\'' + contato.nome + '\',\'' + contato.telefone + '\',\'' + contato.email + '\',\'' + contato.obs + '\',\'' + contato.dtcontato + '\');"></i></td>' +
                                     '<td><i class="bi bi-trash-fill" onclick="apagarContato(' + contato.id + ');"></i></td>' +
                                     '</tr>';
                         }
@@ -106,7 +111,7 @@
                 } // fim confirm
             };
 
-            let editarContato = (id, nome, telefone, email) => {
+            let editarContato = (id, nome, telefone, email, obs, dtcontato) => {
                 editando = true;
                 idContatoEditando = id;
                 $('#form-titulo').html('Editar Contato');
@@ -114,6 +119,8 @@
                 $('#input-nome').val(nome.toUpperCase());
                 $('#input-telefone').val(telefone);
                 $('#input-email').val(email);
+                $('#input-obs').val(obs);
+                $('#input-dtcontato').val(dtcontato);
             };
 
             $('#btn-novo').click(() => {
@@ -124,6 +131,7 @@
                 $('#input-nome').val('');
                 $('#input-telefone').val('');
                 $('#input-email').val('');
+                $('#input-dtcontato').val('');
             });
 
             $('#btn-cancelar').click(() => {
@@ -138,7 +146,9 @@
                 let dados = {
                     nome: $('#input-nome').val().toUpperCase(),
                     telefone: $('#input-telefone').val(),
-                    email: $('#input-email').val()
+                    email: $('#input-email').val(),
+                    obs: $('#input-obs').val().toUpperCase(),
+                    dtcontato: new Date().toISOString()
                 };
 
                 let type, url;
